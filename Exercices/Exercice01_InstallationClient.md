@@ -201,7 +201,7 @@ Dans cette partie, vous allez ajouter les logiciels wget, curl, git, Visual Stud
 a- Nous allons installer les outils de base wget, curl et git. Pour ceux qui le désire, vous pouvez également ajouter vim.
 
 ```bash
-sudo apt install wget curl git vim -y
+sudo apt install wget curl git neovim -y
 ```
 
 b. Installez Visual Studio Code (https://code.visualstudio.com/) ou VSCodium (https://vscodium.com) et suivez les instructions pour Linux Ubuntu.
@@ -313,7 +313,10 @@ docker compose version
 
 **Attention** Si vous déposé plus d'une version, je ne corrige que le dernier dépôt fait sur LÉA dans travaux.
 
-```
+```  
+
+![Exemple de remise.](../images/exer1Remise.png)
+
 ## Compétences développées
 
 
