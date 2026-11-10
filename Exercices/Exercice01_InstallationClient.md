@@ -96,7 +96,7 @@ pwd
 #Sortie attendu votre répertoire usager:
 /home/prof
 # Générer la clé SSH en changeant le courriel pour le votre :
-ssh-keygen -t ed25519 -N '' -C "email@example.com"
+ssh-keygen -t ed25519 -N '' -C "Ubuntu client pour 420-W45-SF."
 # Une fois que vous aurez entré cette commande, une question va apparaître :
 Enter file in which to save the key (/home/xxxxx/.ssh/ed25519):
 ```  
@@ -142,13 +142,15 @@ Cette commande vous permet d’avoir l’espace utilisé et disponible pour chaq
 
 Vous devriez pouvoir identifier vos partitions créées lors de l’installation. Le paramètre -h (Human-readable) utilise des suffixes d'unité : octet, kilo-octet, mégaoctet, gigaoctet, téraoctet et pétaoctet afin de réduire le nombre de chiffres à trois ou moins en utilisant la base 2 pour les tailles.
 
-Ici il y a deux partitions qui nous intéressent davantage :
+Ici il y a trois partitions qui nous intéressent davantage :
 
 ```bash
 # La partition LVM probablement : 
 /dev/mapper/ubuntu--vg-ubuntu--lv
-# La partition de boot/efi probablement :
-/dev/sda2
+# Les partitions de /boot/efi et /boot :
+/dev/nvme0n2p2
+/dev/nvme0n2p1
+# Le nom des partitions peut être différent.
 ```
 
 Remarquer les valeurs d'utilisation.
@@ -162,12 +164,13 @@ Un périphérique de bloc est un fichier faisant référence à un périphériqu
 
 ```bash
 lsblk
-# sda, ce sont les données sur votre premier disque dur.
+# nvme0n1, ce sont les données sur votre premier disque dur. Ce disque sera configuré plus tard.
 
-#sdb, ce sont les données sur votre deuxième disque dur non utilisé. Nous allons le configurer dans un autre exercice.
+# nvme0n2, c'est votre disque utilisé présentement. On voit les différentes partitions créées par l'installation.
+# Il se peut que vos disques soient l'inverse d'ici, ou même les noms soient différents.
 ```
 
-![Lsblk](../images/lsblk.jpg)
+![Lsblk](../images/lsblk.png)
 
 Il est également possible d’avoir des informations en mode graphique. Pour ce faire, utiliser l’utilitaire Disques (Disks). 
 
