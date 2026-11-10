@@ -3,8 +3,8 @@
 ### Informations
 - Type de travail : individuel
 - Durée : 1 heure
-- Système d'exploitation : Linux Ubuntu serveur 24.04 ou plus récent.
-- Environnement : virtuel, vSphere.
+- Système d'exploitation : Linux Ubuntu serveur 26.04 ou plus récent.
+- Environnement : virtuel.
 
 ### Objectifs :
 
@@ -20,15 +20,13 @@ Dans cette partie, vous allez installer un serveur Ubuntu selon les spécificati
 
 ### Étape 1 : Installation
 
-a - En utilisant l’ISO ubuntu-24.04-live-server-amd64.iso, créez une machine virtuelle selon les spécifications suivantes :
+a - En utilisant Ubuntu 26.04 serveur pour votre environnement (amd64 ou arm64), créez une machine virtuelle selon les spécifications suivantes :
 
-    Dossier dans vSphere : DFC DS/VM DFC/E25_4372_420W45_ISS_CR  
-    Nom de la VM : E25_4372_420W45_Ub_srv_[Initiale]_[Matricule]
+    Nom de la VM : Ub_srv_420-W45
     CPU : 2
     Mémoires : 2 Go
     Disque dur : 2 disques, 20 Go chacun en partitionnement dynamique 
-    Carte réseau : VM DFC2 (réseau 10.100.2.0)
-    CD/DVD : ISO ubuntu-24.04-live-server-amd64.iso
+    CD/DVD : ISO ubuntu-26.04.1-live-server-amd64.iso
     
 
 b -	Une fois la VM créée, lancez la VM et installez le serveur Ubuntu selon les spécifications suivantes :
@@ -48,8 +46,8 @@ Pour vous déplacer dans les fenêtres, utiliser votre touche tabulation. Pour s
 	- Configuration profil :
         Attention pour le nom d'utilisateur et mot de passe je vous recommande d'utiliser le même que votre compte principal sur votre client.
         Votre nom : ;-)
-        Le nom de la machine : srv-web-[matricule]
-        Nom d'utilisateur : a votre choix.
+        Le nom de la machine : srv-web-w45
+        Nom d'utilisateur : utiliser la première lettre de votre prénom suivi de votre nom. Par exemple, croy.
         Mot de passe : a votre choix.
 
 	- Ne pas configurer pour Ubuntu Pro.	

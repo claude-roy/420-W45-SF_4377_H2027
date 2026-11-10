@@ -4,8 +4,8 @@
 - Évaluation : formative  
 - Type de travail : individuel  
 - Durée : 2 heures  
-- Système d'exploitation : Linux Ubuntu 24.04  
-- Environnement : virtuel, vSphere
+- Système d'exploitation : Linux Ubuntu 26.04 LTS (version la plus récente) 
+- Environnement : virtuel
 
 ### Objectifs :
 
@@ -24,24 +24,19 @@ Dans cette partie, vous allez installer un serveur Ubuntu selon les spécificati
 
 ### Étape 1 : Installation  
 
-a - En utilisant l’ISO ubuntu-24.04-desktop-amd64.iso, créez une machine virtuelle selon les spécifications suivantes :  
+a - En utilisant l’ISO d'un Ubuntu 26.04 desktop pour votre environnement (amd64 ou arm64), créez une machine virtuelle selon les spécifications suivantes :  
 
-    Dossier dans vSphere : DFC DS/VM DFC/E25_4372_420W45_ISS_CR/  
-    Nom de la VM : E25_4372_Ub_Cli_Initiale_#Matricule   
-    Storage (disque vSphere) : ESXDFC2  
+    Nom de la VM : Ub_Cli_420-W45   
     CPU : 2  
-    Mémoires : 8 Go  
-    Disque dur : 2 disques, 25 Go chacun en **partitionnement dynamique (Thin provision)**  
+    Mémoires : 8 Go (il est possible d'utiliser 4 Go) 
+    Disque dur : 2 disques, 25 Go chacun 
     **Attention**: Si vous avez oublié d'ajouter le deuxième disque lors de la configuration initiale, vous devrez modifier la configuration avant le démarrage pour ajouter un deuxième disque.  
-    Carte réseau : VM DFC2 (réseau 10.100.2.0)  
-    CD/DVD : ISO ubuntu-24.04-desktop-amd64.iso  
-    Carte vidéo : Activer le support 3D  
+    CD/DVD : ISO ubuntu-26.04.1-desktop-amd64.iso  
 
-À la maison : Utiliser les mêmes informations pour les CPUs et le disque. Vous pouvez utiliser la version d’Ubuntu que vous désirez, mais au minimum 24.04.  
 
 b -	Une fois la VM créée, lancez la VM et installez le client Ubuntu selon les spécifications suivantes :
 
-    Clavier : French (Canada) et English (US), le duexième clavier put être ajout après l'installation.  
+    Clavier : French (Canada) et English (US), le deuxième clavier peut être ajouté après l'installation.  
     Mise à jour disponible : Ignorer (si demandé).  
     Type d'installation : Installation interactive.  
     Optimisez votre ordinateur : ne rien choisir.  
@@ -201,7 +196,7 @@ Dans cette partie, vous allez ajouter les logiciels wget, curl, git, Visual Stud
 a- Nous allons installer les outils de base wget, curl et git. Pour ceux qui le désire, vous pouvez également ajouter vim.
 
 ```bash
-sudo apt install wget curl git firefox vim -y
+sudo apt install wget curl git vim -y
 ```
 
 b. Installez Visual Studio Code (https://code.visualstudio.com/) ou VSCodium (https://vscodium.com) et suivez les instructions pour Linux Ubuntu.
@@ -335,4 +330,3 @@ Note : les compétences sont développées en partie.
 - LVM : [https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index)
 - zsh : [https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/](https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/)
 - Powerlevel10k : [https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
-
