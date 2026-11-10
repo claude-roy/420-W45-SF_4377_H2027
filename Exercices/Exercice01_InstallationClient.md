@@ -34,15 +34,17 @@ a - En utilisant l’ISO d'un Ubuntu 26.04 desktop pour votre environnement (amd
     CD/DVD : ISO ubuntu-26.04.1-desktop-amd64.iso  
 
 
-b -	Une fois la VM créée, lancez la VM et installez le client Ubuntu selon les spécifications suivantes :
+b -	Une fois la VM créée, lancez la VM et installez le client Ubuntu selon les spécifications suivantes (si vous n'avez pas d'information pour une fenêtre, vous prenez les valeurs par défaut) :
 
-    Clavier : French (Canada) et English (US), le deuxième clavier peut être ajouté après l'installation.  
+    Langue : Français.  
+    Clavier : Français (Canada) et English (US), le deuxième clavier peut être ajouté après l'installation.  
     Mise à jour disponible : Ignorer (si demandé).  
     Type d'installation : Installation interactive.  
-    Optimisez votre ordinateur : ne rien choisir.  
     Application et mise à jour : Installation par défaut.  
-    Configuration du disque : Fonctions avancées et utiliser LVM pour la nouvelle installation d'Ubuntu. Acceptez le partitionnement proposé, sélectionnez le premier disque et continuez.  
+    Chiffrement et système de fichiers : Fonctions avancées et utiliser LVM sans chiffrement. Si on vous le demande, acceptez le partitionnement proposé, sélectionnez le premier disque et continuez.  
     Utilisateur : utiliser la première lettre de votre prénom suivi de votre nom. Par exemple, croy.  
+    Le nom de votre ordinateur : cli-ub-w45  
+    Fuseau horaire : Toronto  
  
 
 ## Partie 2 : Première utilisation de votre machine
@@ -330,3 +332,6 @@ Note : les compétences sont développées en partie.
 - LVM : [https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index)
 - zsh : [https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/](https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/)
 - Powerlevel10k : [https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
+
+---  
+*Version 2026-11-10*
