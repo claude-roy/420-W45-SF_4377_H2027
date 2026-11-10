@@ -126,15 +126,15 @@ Pour quitter top entrer q.
 
 ## Partie 3 : Ajout de services et configurations
 
-Dans cette partie, vous allez ajouter les logiciels wget, curl, git et Docker et faire quelques configurations supplémentaires.
+Dans cette partie, vous allez ajouter les logiciels wget, curl, git, vim et Docker et faire quelques configurations supplémentaires.
 
 
 ### Étape 2 : Ajout de logiciels de base
 
-a- Nous allons installer les outils de base wget, curl et git et vim.
+a- Nous allons installer les outils de base wget, curl,  git et vim.
 
 ```bash
-sudo apt install wget curl git vim -y
+sudo apt install wget curl git neovim -y
 ```
 
 ### Étape 3: Ajout de Docker
@@ -159,6 +159,8 @@ git version
 docker version
 docker compose version
 ```
+
+![Exemple de remise.](../images/exer2Remise.png)
 
 ## Compétences développées
 
