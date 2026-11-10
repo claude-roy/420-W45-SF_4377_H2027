@@ -36,8 +36,8 @@ Pour vous déplacer dans les fenêtres, utiliser votre touche tabulation. Pour s
     - Clavier : French (Canada) ou English (US)
     - Type d’installation : Ubuntu Server
     - Connexions réseau : DHCPv4
-    - Configurer le proxy : Laissez vide et appuyer Terminé.
-    - Miroir d'archive Ubuntu : ne rien changer et appuyer sur Terminé.
+    - Configurer le proxy : Laissez vide et choisir Terminé (Done).
+    - Miroir d'archive Ubuntu : ne rien changer et appuyer sur Terminé (Done).
     - Configuration de stockage guidée :
         Utiliser un disque entier
              Laissé Set up this disk as an LMV group
@@ -52,7 +52,7 @@ Pour vous déplacer dans les fenêtres, utiliser votre touche tabulation. Pour s
 
 	- Ne pas configurer pour Ubuntu Pro.	
 	- Configuration SHH : Cochez Installer le serveur OpenSSH (cliquez sur la barre d'espace). N'importez pas la clé SSH.  
-	-  Featured Server Snaps ne cocher rien et cliqué sur Terminé
+	- Featured Server Snaps ne cocher rien et cliqué sur Terminé
 	- Patientez! L'INSTALLATION EST EN COURS.
  
  
@@ -84,13 +84,14 @@ sudo apt update && sudo apt upgrade -y
 df -h
 ```
 
-Ici il y a deux partitions qui nous intéressent davantage :
+Ici il y a trois partitions qui nous intéressent davantage :
 
 ```bash
-# La partition LVM probablement : 
-/dev/mapper/ubuntu--vg-ubuntu--lv
-# La partition de boot/efi probablement :
-/dev/sda2
+# La partition LVM : 
+/dev/dm-0
+# Les partition de /boot et /boot/efi :
+/dev/nvme0n1p2
+/dev/nvme0n1p1
 ```
 
 Remarquer les valeurs d'utilisation.
@@ -104,12 +105,12 @@ Un périphérique de bloc est un fichier faisant référence à un périphériqu
 
 ```bash
 lsblk
-# sda, ce sont les données sur votre premier disque dur.
+# nvme0n1, ce sont les données sur votre premier disque dur.
 
-# sdb, ce sont les données sur votre deuxième disque dur non utilisé. Nous allons le configurer dans un autre exercice.
+# nvme0n2, ce sont les données sur votre deuxième disque dur non utilisé. Nous allons le configurer dans un autre exercice.
 ```
 
-![Lsblk](../images/lsblk.jpg)
+![Lsblk](../images/lsblk-serv.png)
 
 
 
@@ -181,3 +182,6 @@ Note : les compétences sont développées en partie.
 - LVM : [https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index)
 
 - zsh : [http://https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/](http://https://kifarunix.com/install-and-setup-zsh-and-oh-my-zsh-on-ubuntu-20-04/) 
+ 
+---  
+*Version 2026-11-10*
