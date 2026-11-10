@@ -1,5 +1,5 @@
 # Installation des serveurs et des services 420-W45-SF
-## UBR4377, hiver 2027  
+## UBR4377, automne 2026  
 ### PROFESSEURS
 Honoré Hounwanou <hhounwanou@csfoy.ca>  
 Claude Roy <clroy@csfoy.ca>  
@@ -53,4 +53,4 @@ Ce calendrier est donné à titre indicatif et peut être modifié en fonction d
 |Exercices à remettre	|10|
 
 ---  
-*Version 2026-10-24*
+*Version 2026-11-10*
