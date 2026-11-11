@@ -4,7 +4,7 @@
 - Type de travail : individuel
 - Durée : 1 heure
 - Système d'exploitation : Linux Ubuntu client et Ubuntu serveur
-- Environnement : virtuel, vSphere
+- Environnement : virtuel
 
 ### Objectifs :
 
@@ -43,10 +43,13 @@ sudo lvs >> FichierLVM.txt
 
 ## Partie 3 : Modification de votre stockage LVM
 
-D'abord il faut ajouter le disque <code>sdb</code> dans le "physiqual volume" : 
+D'abord il faut ajouter le deuxième disque, <code>nvme0n1 ou 2</code>, dans le "physiqual volume" (ajuster avec votre nom de disque) : 
 
 ```bash
-sudo pvcreate /dev/sdb # Si sdb est bien le nouveau disque vérifier avec la commande lsblk de la partie 1
+lsblk
+# Noter le disque n'ayant pas de partition  
+
+sudo pvcreate /dev/nvme0n2 # Si nvme0n2 est bien le nouveau disque vérifier avec la commande lsblk.
 sudo pvs
 ```
 
@@ -55,7 +58,7 @@ Par la suite, nous pouvons ajouter le disque dans le "volume group" :
 
 ```bash
 sudo vgs  
-sudo vgextend ubuntu-vg /dev/sdb # Attention: prenez le nom que la commande sudo vgs vous retourne pour le bon nom de VG.
+sudo vgextend ubuntu-vg /dev/nvme0n2 # Attention: prenez le nom que la commande sudo vgs vous retourne pour le bon nom de VG.
 sudo vgs  
 ```
 
@@ -65,9 +68,35 @@ Maintenant, nous allons étendre le "logical volume" :
 ```bash
 df -h
 sudo lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
-# ici j'utilise le nom complet de la partition logique renvoyé par la commande df.
+# Ici j'utilise le nom complet de la partition logique renvoyé par la commande df. Il se peut que le nom soit différent sur le serveur, mais utiliser ce nom. Vous pouvez confirmer le nom avec ls -hl /dev/mapper.
 ```
 
+
+
+## Partie 4: Ajuster votre fichier /etc/fstab
+
+Débutons par une vérification de l'état du fichier /etc/fstab avec la commande df :
+
+```bash
+df -H 
+```
+
+Remarqué l'entré pour votre partition lvm dont le point de montage est <code>/</code> (root). C'est-à-dire celle que nous avons étendue. Elle n'est pas étendue.  
+
+Le <code>resize2fs</code> est un utilitaire en ligne de commande qui vous permet de redimensionner des systèmes de fichiers ext2, ext3 ou ext4.  
+
+<code>sudo resize2fs /dev/VG1/LV1</code>
+
+Pour que le système de fichiers utilise la totalité de l'espace disponible, exécutez la commande :
+
+```bash
+sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv #Le nom de la partition monté dans le fstab.
+df -H
+```  
+
+Note : L'extension d'un système de fichiers est une opération à risque modéré. Il est donc recommandé de sauvegarder l'intégralité de votre partition pour éviter toute perte de données.
+ 
+## Vérification finale
 
 Vérifier le résultat et placer l'information dans votre fichier : 
 
@@ -89,42 +118,21 @@ date >> FichierLVM.txt
 sudo pvs >> FichierLVM.txt
 sudo vgs >> FichierLVM.txt
 sudo lvs >> FichierLVM.txt
-```
+```  
 
-## Partie 4: Ajuster votre fichier /etc/fstab
+## Pour vérification
 
-Débutons par une vérification de l'état du fichier /etc/fstab avec la commande df :
-
-```bash
-df -H 
-```
-
-Remarqué l'entré pour votre partition lvm dont le point de montage est <code>/</code> (root). C'est-à-dire celle que nous avons étendue. Elle n'est pas étendue.  
-
-Le <code>resize2fs</code> est un utilitaire en ligne de commande qui vous permet de redimensionner des systèmes de fichiers ext2, ext3 ou ext4.  
-
-<code>sudo resize2fs /dev/VG1/LV1</code>
-
-Pour que le système de fichiers utilise la totalité de l'espace disponible, exécutez la commande :
+Placez vos deux fichiers de vérifications dans un document compressé (zip) :  
 
 ```bash
-sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv #Le nom de la partition monté dans le fstab.
-df -H
-```
+# Pour le client.
+zip TracesClient.zip Fichier*.*
 
+# Pour le serveur. Vous devez installer zip sur le serveur.
+zip TracesServeur.zip Fichier*.*  
+``` 
 
-
-Note : L'extension d'un système de fichiers est une opération à risque modéré. Il est donc recommandé de sauvegarder l'intégralité de votre partition pour éviter toute perte de données.
- 
-## Vérification finale
-
-Utilisez les trois commandes suivantes pour vérifier votre installation, et ce pour les deux VMs (dans un seul fichier).
-
-```bash
-sudo pvs 
-sudo vgs 
-sudo lvs 
-```
+Remettre les deux documents compressés.  
 
 ## Compétences développées
 
@@ -146,3 +154,5 @@ Note : les compétences sont développées en partie.
 - Formater un disque dur : [https://lecrabeinfo.net/formater-un-disque-dur-ssd-cle-usb-sur-ubuntu-linux.html#methode-n2-avec-gnome-disques](https://lecrabeinfo.net/formater-un-disque-dur-ssd-cle-usb-sur-ubuntu-linux.html#methode-n2-avec-gnome-disques)
 - LVM : [https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index)
 
+---  
+*Version 2026-11-10*

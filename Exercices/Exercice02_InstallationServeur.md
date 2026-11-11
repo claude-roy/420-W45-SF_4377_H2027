@@ -151,6 +151,8 @@ Avec ces commandes, vous avez installé Docker, vous avez ajouté votre utilisat
 
 Vous devez relancer votre session  pour que votre utilisateur soit inclus dans le groupe docker.
 
+## Pour vérification
+
 Utilisez les commandes suivantes pour vérifier votre installation :
 
 ```bash
