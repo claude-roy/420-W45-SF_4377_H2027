@@ -3,46 +3,44 @@
 ### Informations
 - Évaluation : formative
 - Type de travail : individuel 
-- Durée : 3 heures
+- Durée estimée : 3 heures
 - Système d'exploitation : Linux Ubuntu client et serveur
-- Environnement : virtuel, vSphere.
+- Environnement : virtuel
+
+Vous devez remettre un document Word contenant les vérifications demandées. Les informations demandées vous seront indiquées tout au long de l'exercice.
 
 ### Objectifs
 
 - Effectuer des tâches de gestion du système d’exploitation.
-- Création correcte des comptes et des groupes d’utilisateurs.
-- Attribution correcte des droits d’accès.
-- Gestion appropriée des processus, de la mémoire et de l’espace disque.
+- Créer correctement les comptes et les groupes d’utilisateurs.
+- Attribuer correctement les droits d’accès.
+- Gérer de façon appropriée les processus, la mémoire et l’espace disque.
 - Localiser l'emplacement et la taille du noyau (kernel) Linux.
-- Localiser les modules associés au noyau de Linux.
+- Localiser les modules associés au noyau Linux.
 - Vérifier les modules chargés en mémoire.
-- Localiser les fichiers sources de Linux.
 - Utiliser des commandes d'administration système.
 
-## Pour vérification
+## Section 1 - Gestion des utilisateurs
 
-Vous devez remettre un document Word contenant les vérifications demandées.
-
-## Section 1 Gestion des utilisateurs
-
-### Création d'usagers
+### Création d'utilisateurs
 
 - Connectez-vous à votre serveur depuis votre station de travail.
 
-- Vérifier la présence du groupe suivant, s'il n'est pas présent, créer-le :
+- Vérifiez la présence du groupe suivant. S'il n'est pas présent, créez-le :
 
-|Groupe 		| Membres |
+|Groupe  | Membres |
 |----------  | ---------- |
-| users      | tous les usagers du système |
+| users      | tous les utilisateurs du système |
 
 ```bash
 cat /etc/group | grep users
 ```
 
-- En utilisant la commande <code>adduser</code>, créez les usagers du tableau ci-dessous.  
-- Pour les login respectez la nomenclature première lettre du prénom et le nom.  
-- ATTENTION : Tous ces utilisateurs doivent être membre du groupe  **users** vérifier avec le <code>man adduser</code> pour savoir comment y parvenir.  
-- Vérifier la présence du shell avant de l'ajouter à la commande.  
+- En utilisant la commande `adduser`, créez les utilisateurs du tableau ci-dessous.  
+- Pour les noms d'utilisateur, respectez la nomenclature : première lettre du prénom suivie du nom.  
+- **Attention** : tous ces utilisateurs doivent être membres du groupe **users**. Consultez `man adduser` pour savoir comment y parvenir.  
+- Vérifiez la présence du shell avant de l'ajouter à la commande. 
+- L'utilisateur Usager1 ne doit pas pouvoir ouvrir une session sur le serveur.   
 
 
 
@@ -51,53 +49,69 @@ cat /etc/group | grep users
 | Éric Bédard   | /home/ebedard | S0l&il01      |/bin/bash |
 | Joanie Slyte  | /home/jslyte  | S0l&il01      |/bin/bash |
 | Raja Ayadi    | /home/rayadi  | S0l&il01      |/bin/sh |
-| Usager1       | aucun     	  | aucun         | /sbin/nologin  |
+| Usager1       | aucun         | aucun         |/sbin/nologin  |
 
 
-Exemple de création (il manque des paramètres) : 
+Exemple de la commande de base pour la création d'utilisateurs (il manque des paramètres pour ce qui est demandé) : 
 
 ```bash
-$sudo adduser ebedard
+sudo adduser ebedard
 ```
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-Pour ajouter les membres dans un groupe supplémentaire en utilisant le paramètre <code>--add-extra-groups</code>, il faut éditer le fichier <code>/etc/adduser.conf</code>. Vous devez décommenter la variable EXTRA\_GROUPS et l'éditer pour ajouter le groupe désiré. Dans notre cas, la valeur par défaut est déjà le groupe <code>users</code>. Ouvrez le fichier <code>/etc/adduser.conf</code> pour vérifier (il est en commentaire, car c'est la valeur par défaut).
+Pour ajouter les membres dans un groupe supplémentaire en utilisant le paramètre `--add-extra-groups`, il faut éditer le fichier `/etc/adduser.conf`. Vous devez décommenter la variable `EXTRA_GROUPS` et l'éditer pour ajouter le groupe désiré. Dans notre cas, la valeur par défaut est déjà le groupe `users`. Ouvrez le fichier `/etc/adduser.conf` pour vérifier (il est en commentaire, car c'est la valeur par défaut).
 
-Voici des exemples de la création d'utilisateurs.
+Voici des exemples de création d'utilisateurs :
 
 ```bash
-$sudo adduser ebedard --add-extra-groups
-$sudo adduser jslyte --add-extra-groups
-$sudo adduser rayadi --shell /bin/sh --add-extra-groups
-$sudo adduser Usager1 --shell /sbin/nologin --add-extra-groups --allow-bad-names --no-create-home --disabled-login
+sudo adduser ebedard --add-extra-groups
+# Un message indique que ebedard est déjà dans le groupe users.
+# Les nouveaux utilisateurs sont automatiquement ajoutés au groupe users.
+sudo adduser jslyte
+sudo adduser rayadi --shell /bin/sh
+sudo adduser Usager1 --shell /sbin/nologin --allow-bad-names --no-create-home --disabled-login
 # L'utilisation de --disabled-login rend redondant l'utilisation de --shell /sbin/nologin.
 ```
 </details>  
+<br>  
 
-- Créer ou utiliser les groupes suivants et ajouter les bons usagers aux membres des groupes  :
+- Créez ou utilisez les groupes suivants et ajoutez-y les bons utilisateurs :
 
 |Groupe | Membres |
 |----------     | ----------    |
-| users | tous les usagers du système |
-| admin | Vous et Raja Ayadi |
-| cdrom | tous les usagers du système |
-| rh | Eric Bédard et Joanie Slyte |  
+| users | tous les utilisateurs du système |
+| adm | Vous et Raja Ayadi |
+| cdrom | tous les utilisateurs du système à l'exception de Usager1 |
+| rh | Éric Bédard et Joanie Slyte |  
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-Exemples :
+Pour vérifier les groupes existants :  
 
 ```bash
-$sudo groupadd admin
-$sudo usermod -aG admin rayadi
+getent group
+```  
+Pour vérifier les membres d'un groupe :  
+
+```bash
+getent group {nom_du_groupe}
+```  
+
+Pour créer un groupe et y ajouter un membre :
+
+```bash
+sudo groupadd admin
+sudo usermod -aG admin rayadi
 ```
 
 </details>
 
-- Modifier les mots de passe des utilisateurs **ebedard** et **jslyte** pour "Pa$$word01"
+<br> 
+
+- Modifiez les mots de passe des utilisateurs **ebedard** et **jslyte** par « Pa$$word01 » (sans les guillemets).
 
 ### Création d’une structure de fichiers
 
@@ -107,45 +121,51 @@ $sudo usermod -aG admin rayadi
 
 - Modifiez les attributs de ces répertoires de la manière suivante :
 
-1- DSTI : 
+1. DSTI : 
 
-   - Propriétaire : root  
-   - Accessible en lecture, écriture et exécution pour le propriétaire  
-   - Accessible en lecture, écriture et exécution pour le groupe admin (vous devez changer le groupe du répertoire)  
-   - Pas accessible pour les autres  
+   - Propriétaire : root.  
+   - Groupe : adm.  
+   - Accessible en lecture, écriture et exécution pour le propriétaire.   
+   - Accessible en lecture, écriture et exécution pour le groupe adm.  
+   - Pas accessible pour les autres.  
 
-2- RH :  
+2. RH :  
 
-   - Propriétaire : root  
-   - Accessible en lecture, écriture et exécution pour le propriétaire  
-   - Accessible en lecture, écriture  pour le groupe rh  
-   - Pas accessible pour les autres  
+   - Propriétaire : root.  
+   - Groupe : rh.  
+   - Accessible en lecture, écriture et exécution pour le propriétaire.  
+   - Accessible en lecture, écriture et exécution pour le groupe rh.  
+   - Pas accessible pour les autres.  
 
-3- Users :  
+3. Users :  
 
-   - Propriétaire : root  
-   - Groupe : users  
-   - Accessible en lecture, écriture et exécution pour le propriétaire  
-   - Accessible en lecture, écriture et exécution pour le groupe users  
-   - Accessible en lecture, écriture et exécution pour les autres  
-   - Placer un sticky bit sur le répertoire  
+   - Propriétaire : root.  
+   - Groupe : users.  
+   - Accessible en lecture, écriture et exécution pour le propriétaire.  
+   - Accessible en lecture, écriture et exécution pour le groupe users.  
+   - Accessible en lecture, écriture et exécution pour les autres.  
+   - Placez un sticky bit sur le répertoire.  
 
 ### Utilisation de liens symboliques
 
-- Pour tous les usagers, sauf root, créer un lien symbolique dans son répertoire personnel vers /var/data.
-- La commande doit être faite à partir de votre usager principal sans avoir à vous déplacer dans l'arborescence.
-- Connectez-vous avec l'un des usagers pour vérifier le fonctionnement du lien symbolique.
+- Pour tous les utilisateurs, sauf root, créez un lien symbolique dans leur répertoire personnel vers /var/data.
+- La commande doit être exécutée à partir de votre utilisateur principal sans avoir à vous déplacer dans l'arborescence.
+- Connectez-vous avec l'un des utilisateurs pour vérifier le fonctionnement du lien symbolique.
 
 ## Pour vérification
-Remettre, dans le document Word de remise, une capture d’écran des commandes suivantes:
+Remettez, dans le document Word de remise, une capture d’écran des commandes suivantes :
 
 ```bash
 tail -n 4 /etc/passwd
-tail /etc/group
-ls -l /var/data
-```
+getent group users adm cdrom rh
+ls -hl /var/data
+```  
 
-## Section 2 Administration système
+Exemple d'image de remise :  
+
+![Exemple d'image de remise 1](../images/exer5Remise1.png)
+
+## Section 2 - Administration système
 
 ### Environnement Linux
 
@@ -164,65 +184,63 @@ uname -r
 lsb_release -a
 ``` 
 
-- Localisez le  noyau Linux et donnez sa taille :
+- Vous allez localiser le noyau Linux :
 
 ```bash
 cd /boot
-```
-
-- Dans ce répertoire, le noyau compressé et binaire Linux commence avec le mot vmlinuz-*version*.  
-- Regardez son nom complet et sa taille :
-
-```bash
 ls -lh
 ```
 
-- À partir des liens symboliques, essayez de déterminer qu'elle est la version utilisée.
-- Pour voir les modules qui peuvent être associés au noyau : 
+- Dans ce répertoire, le nom du fichier binaire compressé du noyau Linux commence par `vmlinuz-`*version*.  
+- Regardez son nom complet et sa taille.  
+
+- À partir des liens symboliques, essayez de déterminer quelle est la version utilisée.
+- Pour voir les modules chargés : 
 
 ```bash
 cat /proc/modules | less
-```
+```  
 
-- Ce sont tous les modules actifs avec le kernel.
+- Ce sont tous les modules chargés dans le noyau.
 - Entrez la commande :
 
 ```bash
-lsmod |less
+lsmod | less
 ```
 
-- Faire <code>man lsmod</code>, y a-t-il un manuel pour cette commande ?  
-- Si le manuel n'est pas installé sur votre machine, cherchez sur le Web pour trouver des informations.  
-- On vous proposera aussi de lire sur <code>modprobe</code> et <code>modinfo</code>.  
-- Essayer la commande suivante:   
+- Faites `man lsmod`. Y a-t-il un manuel pour cette commande ?  
+- Si le manuel n'est pas installé sur votre machine, cherchez l'information sur le Web.  
+- On vous proposera aussi de lire sur `modprobe` et `modinfo`.  
+- Essayez la commande suivante :   
 
 ```bash
 modinfo cryptd
 ```
 
-- Vous voyez un module qui est responsable de cryptographies asynchrones.  
+- Vous voyez un module qui est responsable de la cryptographie asynchrone.  
 - Entrez la commande :  
 
 ```bash
-lsmod | grep ip_tables
+lsmod | grep x_tables
 ```
 
-- Trouvez-vous le module nommé <code>ip_tables</code> (firewall Linux) ?
+- Ce module est responsable de l'outil *userspace* `iptables` qui permet de configurer le coupe-feu `Netfilter`.   
+- Trouvez-vous le module nommé `x_tables` ?
 - Entrez maintenant la commande :
 
 ```bash
 sudo iptables -vnL 
 ```
 
-- Cette commande affiche les règles du coupe-feu par défaut. Actuellement, il y a seulement les règles de coupe-feu de Docker.
+- Cette commande affiche les règles par défaut du coupe-feu. Actuellement, seules les règles de Docker y figurent.
 
 [Pour en savoir un peu plus sur iptables](https://www.linuxtricks.fr/wiki/iptables-quelques-trucs-utiles)  
 
-**Notes :** La commande <code>iptables</code> est considérée comme désuète, mais encore beaucoup utilisée pour configurer Netfilter. Elle est remplacée par <code>nftables</code> : [https://wiki.nftables.org/wiki-nftables/index.php/What_is_nftables%3F](https://wiki.nftables.org/wiki-nftables/index.php/What_is_nftables%3F).  
+**Note :** La commande `iptables` est considérée comme désuète, mais encore beaucoup utilisée pour configurer Netfilter. Elle est remplacée par `nftables` : [https://wiki.nftables.org/wiki-nftables/index.php/What_is_nftables%3F](https://wiki.nftables.org/wiki-nftables/index.php/What_is_nftables%3F). Malheureusement, Docker utilise encore `iptables` et non `nftables`.  
 
-- Vous pouvez refaire l'ensemble de la partie précédente sur votre poste client. Pour voir s’il y a des différences.
+- Vous pouvez refaire l'ensemble de la partie précédente sur votre poste client pour voir s’il y a des différences.
 
-### Commandes d'administration  système
+### Commandes d'administration système
 
 #### Les disques 
 
@@ -232,13 +250,13 @@ sudo iptables -vnL
 df -H
 ```
 
-- Essayons maintenant 
+- Essayons maintenant :
 
 ```bash
 sudo fdisk -l | less
 ```
 
-- Essayons maintenant les commandes pour voir les partitions LVM: 
+- Essayons maintenant les commandes pour voir les partitions LVM : 
 
 ```bash
 sudo pvdisplay
@@ -246,15 +264,15 @@ sudo vgdisplay
 sudo lvdisplay
 ```
 
-- Afficher le contenu du fichier /etc/fstab
+- Affichez le contenu du fichier `/etc/fstab` :
 
 ```bash
 sudo cat /etc/fstab
 ```
 
-**Question** : Quel est l'utilité du fichier /etc/fstab ?  
+**Question** : Quelle est l'utilité du fichier /etc/fstab ?  
 
-- Essayez <code>man fstab</code>,
+- Essayez `man fstab`.
 
 <details>
 <summary markdown="span">Réponse :</summary>  
@@ -265,20 +283,20 @@ Le fichier fstab (file systems table) est la table des différents systèmes de 
 
 #### Gestion des processus  
 
-- Entrez la commande:  
+- Entrez la commande :  
 
 ```bash
 ps 
 ```
 
-- Vous voyez les processus appartenant à votre usager.  
-- Ajouter les paramètres suivants :  
+- Vous voyez les processus appartenant à votre utilisateur.  
+- Ajoutez les paramètres suivants :  
 
 ```bash
 ps aux
 ```
 
-- Vous voyez maintenant l'ensemble des processus de votre système. Remarquer la dernière ligne, elle représente la commande que vous venez d'exécuter  qui est elle aussi un processus.  
+- Vous voyez maintenant l'ensemble des processus de votre système. Remarquez la dernière ligne : elle représente la commande que vous venez d'exécuter, qui est elle aussi un processus.  
 
 - Entrez la commande :  
 
@@ -286,85 +304,96 @@ ps aux
 ps -ef
 ```
 
-**Question** : Indiquer  quel est le processus qui est tout au début et qui est considéré comme le père de tous les processus
+**Question** : Indiquez quel est le premier processus lancé (celui en haut de la liste).   
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-```bash
+```text
 UID      PID     PPID   C STIME  TTY          TIME CMD
-root      1        0    0 May04  ?        00:00:04 /sbin/init
+root       1        0   0 Nov12  ?        00:00:23 /usr/lib/systemd/systemd --system --deserialize=82
 ```
 
 </details>
+<br>  
 
 - Entrez la commande :
 
 ```bash
-ps aux |grep syslog  
+ps aux | grep syslog  
 ```
 
 - Vous devriez voir deux processus : 
-    - Le premier est le processus syslog (/usr/sbin/rsyslogd).
-    - le deuxième est votre commande ps aux avec le grep.
+    - Le premier est le processus `syslog` (/usr/sbin/rsyslogd).
+    - Le deuxième est votre commande `ps aux` avec le `grep`.
 
-**Question** : qui est le propriétaire du processus rsyslogd ?  
+**Question** : Qui est le propriétaire du processus rsyslogd ?  
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 syslog  
 </details>
+<br>  
 
-**Question** : trouvez le numéro (ID) de l'usager qui est propriétaire du processus  ?
+**Question** : Quel est le numéro (UID) de l'utilisateur propriétaire du processus ?
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
+```bash
 cat /etc/passwd | grep syslog
+```  
 
 ![syslog](../images/syslog.jpg)
 
 </details>
+<br>  
 
-**Question** : est-ce que cet usager a accès à un Shell ?
+**Question** : Est-ce que cet utilisateur a accès à un shell ?
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-non   
+Non.  
 syslog:x:107:113::/home/syslog:**/usr/sbin/nologin**
 
 </details>
+<br>  
 
-**Question** : est-ce que cet usager est membre d'un groupe ?
+**Question** : Est-ce que cet utilisateur est membre d'un groupe ?
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-oui de 2 groupes : adm et syslog  
-cat /etc/group | grep syslog
-</details>
+Oui, de deux groupes : adm et syslog.  
 
-<hr>
+```bash
+groups syslog
+```  
+
+</details>
+<br>  
+
+---
 
 **Sur votre poste client.**  
 
-- Entrez la commande top
+- Entrez la commande `top` :
 
 ```bash
 top
 ```
 
 - Remarquez les informations suivantes : le nombre total de tâches affichées, l'utilisation du CPU, la mémoire vive et la partition d'échange SWAP.  
-- Laissez la commande top et ouvrez le navigateur Firefox.  
+- Laissez `top` ouvert et ouvrez le navigateur Firefox.  
 - Dans une autre fenêtre de commandes, entrez les commandes suivantes : 
 
 ```bash
 pidof firefox
-# Vous devriez avoir plusieur processus.  
+# Vous devriez avoir plusieurs processus.  
 
 kill $(pidof firefox)  
-# Firefox s'est fermé  
+# Firefox s'est fermé.  
 ```
 
 - Fermez top.  
@@ -377,18 +406,19 @@ kill $(pidof firefox)
 cd
 ```
 
-**Question**  : Dans quel répertoire vous ramène cette commande  ? 
+**Question** : Dans quel répertoire vous ramène cette commande ? 
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-- Utiliser <code>pwd</code> pour vous aider.  
-- Vouz devez être dans votre répertoire d'utilisateur.  
+- Utilisez `pwd` pour vous aider.  
+- Vous devez être dans votre répertoire d'utilisateur.  
 
 Remarque : votre répertoire personnel par défaut est indiqué par le tilde dans l’invite de commandes.
 </details>
+<br>  
 
-***Attention***: Au besoin installer le package <code>plocate</code>.
+**Attention** : si la commande `locate` n'existe pas, installez le paquet `plocate`.
 
 <details>
 <summary markdown="span">Installation de plocate.</summary>  
@@ -398,12 +428,13 @@ sudo apt install plocate -y
 ```  
 
 </details>
+<br>  
 
 - Entrez la commande :
 
 ```bash
 touch toto.txt
-#suivie de :
+# Puis :
 locate toto.txt
 ```
 
@@ -412,42 +443,46 @@ locate toto.txt
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-Non vous ne trouvez pas le fichier. Car <code>locate</code>, cherche dans une base de données. Si celle-ci n'a pas été mise à jour, vous ne pouvez pas trouver les informations.
-Pour mettre à jour la base de données sur lequel se fie l'index utilisé par la commande locate, il faut utiliser la commande <code>sudo updatedb</code> (régulièrement).  
+Non, vous ne trouvez pas le fichier, car `locate` cherche dans une base de données. Si celle-ci n'a pas été mise à jour, vous ne pouvez pas trouver les informations.
+Pour mettre à jour la base de données sur laquelle se fie l'index utilisé par la commande locate, il faut utiliser la commande `sudo updatedb` (régulièrement).  
 
 </details>
+<br>  
 
-- Entrez la commande <code>sudo updatedb</code> et refaire ensuite la commande <code>locate toto.txt</code> vous devriez maintenant trouver le fichier toto.txt.  
+- Entrez la commande `sudo updatedb`, puis refaites la commande `locate toto.txt`. Vous devriez maintenant trouver le fichier `toto.txt`.  
 - Entrez maintenant la commande :
 
 ```bash
 touch toto2.txt
-#suivie de :
-locate toto2.txt # Rien la bd n'est pas mise à jour.
+# Puis :
+locate toto2.txt # Rien : la base de données n'est pas à jour.
 
-# allons-y plutôt avec find :
+# Allons-y plutôt avec find :
 find . -name toto2.txt
 ```
 
 **Question** : Est-ce que le fichier nouvellement créé a été trouvé ?
+
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-Oui 
+Oui.
 
-<code>find</code>, cherche dans le système de fichier. La commande n'a pas besoin d'index. La commande <code>find</code> est un outil puissant qui permet aux administrateurs système de localiser et de gérer des fichiers et des répertoires en fonction d'un large éventail de critères de recherche. Il peut trouver des répertoires et des fichiers par leur nom, leur type ou leur extension, leur taille, leurs autorisations, etc.
+`find` cherche dans le système de fichiers. La commande n'a pas besoin d'index. La commande `find` est un outil puissant qui permet aux administrateurs système de localiser et de gérer des fichiers et des répertoires en fonction d'un large éventail de critères de recherche. Elle peut trouver des répertoires et des fichiers par leur nom, leur type ou leur extension, leur taille, leurs autorisations, etc.
 Son apprentissage vous fera gagner beaucoup de temps.
 
 La syntaxe générale de la commande find est :
+
 ```bash
-find {path} {name -of-file or dir-to-search} {action-to-take}
+find {chemin} -name {nom} {action}
 ```
 
-- path : spécifie le répertoire de recherche.  
-- name -of-file or dir-to-search : nom du fichier ou du répertoire à rechercher.  
-- action-to-take : comme copier, supprimer, déplacer, etc.  
+- `{chemin}` : répertoire à partir duquel la recherche est faite.  
+- `{nom}` : nom du fichier ou du répertoire à rechercher.  
+- `{action}` : action facultative à effectuer sur les résultats, comme copier, supprimer, déplacer, etc.  
 
 </details>
+<br>  
 
 - Entrez maintenant la commande :
 
@@ -455,15 +490,16 @@ find {path} {name -of-file or dir-to-search} {action-to-take}
 find / -name toto2.txt
 ```
 
-**Question** : pourquoi avez-vous des messages d'erreur ?
+**Question** : Pourquoi avez-vous des messages d'erreur ?
 
 <details>
 <summary markdown="span">Réponse :</summary>  
 
-Vous faites une recherche à partir de la racine (/), donc dans tout le système de fichier. Il y a des répertoires ou vous n'avez pas de droit de lecture.
+Vous faites une recherche à partir de la racine (/), donc dans tout le système de fichiers. Il y a des répertoires où vous n'avez pas de droits de lecture.
 
-Changez la commande en ajoutant sudo devant et vous devriez avoir beaucoup moins de messages d'erreurs.. Mais le temps de réponse est un peu long, car vous lui avez demandé de chercher dans toute l'arborescence de fichier (/) et non seulement dans l'emplacement courante (.).
+Changez la commande en ajoutant sudo devant et vous devriez avoir beaucoup moins de messages d'erreurs. Par contre, le temps de réponse est un peu long, car vous lui avez demandé de chercher dans toute l'arborescence de fichiers (/) et non seulement dans l'emplacement courant (.).
 </details>
+<br>  
 
 - Entrez maintenant les commandes suivantes :
 
@@ -472,9 +508,9 @@ which find
 
 # Lire les informations sur la commande which.
 man which
-```
+```  
 
-<hr>
+---
 
 ### Vérifier votre configuration réseau
 
@@ -482,7 +518,7 @@ man which
 
 Pour vérifier la configuration de votre réseau :
 
-- D'abord vérification des adresses IPs.
+- Vérifiez d'abord les adresses IP :
 
 ```bash
 ip -4 a
@@ -493,55 +529,58 @@ ip -4 a
 ```bash
 ip route
 # default est votre passerelle.
-# Vérifier la réponse de la passerelle par un ping 
+# Vérifiez la réponse de la passerelle avec un ping : 
 ping -c 3 {Adresse IP passerelle}
-# Probablement l'adresse IPv4 : 10.100.2.1
 ```
 
-- Par la suite, nous voulons savoir si la résolution de nom fonctionne : 
+- Par la suite, nous voulons savoir si la résolution de noms fonctionne : 
 
 ```bash
-# Résolution de nom au niveau local :
+# Résolution de noms au niveau local :
 cat /etc/hosts
-ping localhost # Ping sur la boucle local
-ctrl-c # Pour arrêter les  ping
-ping -c 3 [nomVotreMachine] # C'est l'autre nom avec une adresse débutante par 127.
+ping localhost # Ping sur la boucle locale
+# ctrl-c pour arrêter le ping
+ping -c 3 {nomVotreMachine} # Nom de votre machine, associé à une adresse commençant par 127.0.1.1
 
-# Résolution de nom au niveau des serveurs DNS
+# Résolution de noms au niveau des serveurs DNS
 
 sudo systemctl status systemd-resolved.service
 resolvectl status  
 # Prenez en note l'adresse du serveur DNS.
 ```
 
-- Vérifier si vous atteigniez les serveurs DNS :  
+- Vérifiez si vous atteignez les serveurs DNS :  
 
 ```bash
 ping -c 3 {Adresse IP du serveur DNS}
 ```
 
-- Ping sur le FQDN (Full qualified domain name) du cégep :  
+- Faites un ping sur le FQDN (*Fully Qualified Domain Name*) du cégep :  
 
 ```bash
 ping -c 3 csfoy.ca  
 ```
 
-- Si tous fonctionnent, vous êtes satisfait ;-) 
+- Si tout fonctionne, vous êtes satisfait ;-) 
 
 Vous avez une connectivité avec Internet.
 
 ## Pour vérification
-Remettre, dans le document Word de remise, une capture d’écran de la commande suivante :
+Remettez, dans le document Word de remise, une capture d’écran de la commande suivante :
 
 ```bash
-ping -c 3 google.ca
+ping -c 3 csfoy.ca
 ```
 
+Exemple d'image de remise :  
 
-#### Lecture complémentaire :
+![Exemple d'image de remise 2](../images/exer5Remise2.png)
+
+## Références
 
 [Tutoriel pour comprendre et changer de noyaux Linux avec Ubuntu 20.04 LTS](https://lafibre.info/serveur-linux/noyaux-linux/)
 
-
+---  
+*Version 2026-11-16*
 
 
