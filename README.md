@@ -20,7 +20,7 @@ Ce calendrier est donné à titre indicatif et peut être modifié en fonction d
 
 **(ER)** : exercice à remettre (compte dans la pondération « Exercices à remettre »). Les consignes de remise se trouvent à la fin de chaque énoncé.  
 
-|Cours	|Date cours |Contenu|Exercices <br> Évaluations|  Remise exercice   |
+|Cours	|Date cours |Contenu|Exercices <br> Évaluations|  Remise exercice & TP  |
 |----------:|:-------------:|----------------|:------:|------:|
 |1|	4 déc.<br>P-409<br>Claude |Présentation du plan de cours <br> Présentation des concepts de bases <br> Exercice 1 - Installation Ubuntu|[Ex1](Exercices/Exercice01_InstallationClient.md) **(ER)**||
 |2| 7 déc.<br>P-409<br>Claude|Installation d'un serveur Linux avec LVM et configuration réseau	 |[Ex2](Exercices/Exercice02_InstallationServeur.md) et [Ex3](Exercices/Exercice03_GestionLVM.md)||
