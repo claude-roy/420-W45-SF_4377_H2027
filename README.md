@@ -26,7 +26,7 @@ Ce calendrier est donné à titre indicatif et peut être modifié en fonction d
 |2| 7 déc.<br>P-409<br>Claude|Installation d'un serveur Linux avec LVM et configuration réseau	 |[Ex2](Exercices/Exercice02_InstallationServeur.md) et [Ex3](Exercices/Exercice03_GestionLVM.md)||
 |3| 14 déc.<br>P-409<br>Claude  |Accès distant, les protocoles SSH/SCP |[Ex4](Exercices/Exercice04_PriseEnMainSrv.md)|**Exercice 1**|
 |4| 5 jan.<br>P-409<br>Claude |Admin système les droits et accès |[Ex5](Exercices/Exercice05_AdminSysLinux.md) **(ER)**||
-|5|	8 jan.<br>P-409<br>Claude | Installation d'un environnement de tests sur site |[Ex6](Exercices/Exercice06_InstallationEnvTest.md)||
+|5|	8 jan.<br>P-409<br>Claude |Installation d'un environnement de tests sur site |[Ex6](Exercices/Exercice06_InstallationEnvTest.md)||
 |6|	11 jan.<br>P-409<br>Claude  |**TP 1 - Procédure d'installation d'un serveur** |**TP1**|**Exercice 5**|
 |7|	15 jan.<br>P-409<br>Claude  |Docker	 |[Ex7](Exercices/Exercice07_PriseEnMainConteneur.md) **(ER)**||
 |8|	18 jan.<br>P-409<br>Claude  |Docker file	 |[Ex8](Exercices/Exercice08_DockerImage.md) |**TP1**|
@@ -64,5 +64,6 @@ Ce calendrier est donné à titre indicatif et peut être modifié en fonction d
 |Évaluation finale à caractère synthèse	 |30|
 |Exercices à remettre	|10|
 
----  
+---
+
 *Version 2026-11-13*

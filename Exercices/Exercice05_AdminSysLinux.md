@@ -580,7 +580,6 @@ Exemple d'image de remise :
 
 [Tutoriel pour comprendre et changer de noyaux Linux avec Ubuntu 20.04 LTS](https://lafibre.info/serveur-linux/noyaux-linux/)
 
----  
+---
+
 *Version 2026-11-16*
-
-

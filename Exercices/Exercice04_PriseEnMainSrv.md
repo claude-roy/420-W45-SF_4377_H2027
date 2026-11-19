@@ -471,6 +471,6 @@ Je dois pouvoir voir la commande et le résultat de connexion sur votre serveur.
 
 [https://www.ssh.com/academy/ssh/session-key](https://www.ssh.com/academy/ssh/session-key)
 
+---
 
----  
 *Version 2026-11-15*

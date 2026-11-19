@@ -311,3 +311,7 @@ Remettre une capture d'écran (image jpg, png, gif) démontrant vos 3 conteneurs
 
 ## Références
 [https://docs.docker.com/](https://docs.docker.com/)
+
+---
+
+*Version 2026-11-18*

@@ -322,5 +322,6 @@ phpinfo();
 - Lancez le script `espace.sh`.
 - Analysez l'espace disque utilisé par vos installations.
 
----  
+---
+
 *Version 2026-11-17*

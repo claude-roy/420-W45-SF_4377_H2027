@@ -154,5 +154,6 @@ Note : les compétences sont développées en partie.
 - Formater un disque dur : [https://lecrabeinfo.net/formater-un-disque-dur-ssd-cle-usb-sur-ubuntu-linux.html#methode-n2-avec-gnome-disques](https://lecrabeinfo.net/formater-un-disque-dur-ssd-cle-usb-sur-ubuntu-linux.html#methode-n2-avec-gnome-disques)
 - LVM : [https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index)
 
----  
+---
+
 *Version 2026-11-10*
