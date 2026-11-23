@@ -1,8 +1,8 @@
 # Exercice 7 - Docker : Prise en main des conteneurs Docker
 
 ### Informations
-- Évaluation : formative (à remettre)
-- Type de travail : individuel
+
+- Type de travail : individuel, formative à remettre  
 - Durée estimée : 2 heures
 - Système d'exploitation : Ubuntu client, Windows ou macOS
 - Environnement : Docker

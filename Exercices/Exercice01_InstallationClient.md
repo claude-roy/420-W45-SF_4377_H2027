@@ -1,8 +1,7 @@
 # Exercice 1 – Installation d'un client Ubuntu  
 
 ### Informations  
-- Évaluation : formative  
-- Type de travail : individuel  
+- Type de travail : individuel, formative à remettre  
 - Durée : 2 heures  
 - Système d'exploitation : Linux Ubuntu 26.04 LTS (version la plus récente) 
 - Environnement : virtuel

@@ -1,8 +1,7 @@
 # Exercice 5 - Administration d'un système Linux
 
 ### Informations
-- Évaluation : formative
-- Type de travail : individuel 
+- Type de travail : individuel, formative à remettre  
 - Durée estimée : 3 heures
 - Système d'exploitation : Linux Ubuntu client et serveur
 - Environnement : virtuel
