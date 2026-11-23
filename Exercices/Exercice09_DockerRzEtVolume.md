@@ -1,252 +1,310 @@
-# Exercice 9 - Docker, volume et stockage
+# Exercice 9 - Docker : réseau et volume
 
 ### Informations
-- Durée estimée : 4 heures.
-- Système d'exploitation : Ubuntu client ou Windows.
-- Environnement : Docker.  
 
-### Objectifs  
+- Type de travail : individuel
+- Durée estimée : 4 heures
+- Système d'exploitation : Ubuntu client, Windows ou macOS
+- Environnement : Docker
 
-- Analyser les différents scénarios de déploiement proposés dans les documents de conception.  
-- Distinguer les services à installer sur les serveurs.  
-- Distinguer les services à installer sur le réseau.  
-- Déterminer les étapes à entreprendre pour installer et configurer les services réseau. 
+### Objectifs
 
-Note : je vous recommande de vous créer un répertoire de travail nommé Exercice09.
+- Distinguer les réseaux Docker `bridge`, `none` et `host`.
+- Publier le port d'un conteneur vers l'hôte.
+- Monter un répertoire de l'hôte dans un conteneur (bind mount), en lecture-écriture et en lecture seule.
+- Conserver les données d'une base de données à l'aide d'un volume.
+- Faire communiquer plusieurs conteneurs (WordPress et MySQL).
+
+**Note :** je vous recommande de vous créer un répertoire de travail nommé `Exercice09`.
 
 ## Section 1 - Busybox
 
-### Section 1.1 - Réseau par défaut (bridge)
+### Étape 1 - Réseau par défaut (bridge)
 
-- Ouvrez **deux** terminaux, powershell ou bash, et sur chacun, lancez un conteneur de l'image "busybox" en mode interactif.
+- Ouvrir **deux** terminaux, PowerShell ou bash, et sur chacun, lancer un conteneur de l'image `busybox` en mode interactif.
 
 ```bash
 # Exemple pour le premier conteneur.
 docker container run -it --rm --name busy1 busybox
 ```
 
-- Trouvez l'adresse IP de chaque conteneur.
+- Trouver l'adresse IP de chaque conteneur.
 
-	<details>
-	<summary>Quelle commande ?</summary>
-	
-		ip -4 address
-	
-	</details>
+<details>
+  <summary markdown="span">Quelle commande ?</summary>
 
-- Effectuez une requête ICMP echo request (ping) d'un conteneur vers l'autre. Qu'observez-vous ?
+```bash
+ip -4 address
+```
 
-	<details>
-	<summary>Réponse.</summary>
-	Ils peuvent communiquer à l'intérieur de Docker.
-	</details>
+</details>
+<br>  
 
+- Effectuer une requête ICMP echo request (`ping`) d'un conteneur vers l'autre. Qu'observez-vous ?
 
-- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
+<details>
+  <summary markdown="span">Réponse.</summary>
 
-	<details>
-	<summary>Réponse.</summary>
-	Ils peuvent communiquer à l'extérieur.
-	</details>
+Ils peuvent communiquer à l'intérieur de Docker.
 
-- Quittez les conteneurs : <code>exit</code>.
-- Nettoyez vos conteneurs en supprimant, si nécessaire, ceux créés dans cette section.
+</details>
+<br>  
 
-### Section 1.2 - Réseau none
+- Essayer de faire une requête ICMP echo request vers `www.google.com`. Qu'observez-vous ?
 
-- Lancez un conteneur, en mode interactif, de l'image "busybox" avec l'option "<code>--network none</code>"
+<details>
+  <summary markdown="span">Réponse.</summary>
 
-	<details>
-	<summary>La commande.</summary>
-		
-		docker container run --rm --network none -it --rm busybox
-	
-	</details>
+Ils peuvent communiquer à l'extérieur.
 
+</details>
+<br>  
 
-- Essayez de déduire l'adresse IP du conteneur. Qu'observez-vous ?
+- Quitter les conteneurs : `exit`.
+- Nettoyer vos conteneurs en supprimant, si nécessaire, ceux créés dans cette étape.
 
-	<details>
-	<summary>Réponse.</summary>
-	Il n'y a pas d'adresse. Il n'y a même pas d'interface réseau.
-	</details>
+### Étape 2 - Réseau none
 
-- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
+- Lancer un conteneur, en mode interactif, de l'image `busybox` avec l'option `--network none`.
 
-	<details>
-	<summary>Réponse.</summary>
-	Ce n'est pas possible, car nous ne sommes pas reliés à un réseau.
-	</details>
-	
-- Nettoyez votre conteneur en supprimant, si nécessaire, celui créé dans cette section.
+<details>
+  <summary markdown="span">La commande.</summary>
 
-### Section 1.3 - Réseau host ([Linux seulement](https://docs.docker.com/network/host/))
+```bash
+docker container run --rm --network none -it busybox
+```
 
-- Lancez un conteneur, en mode interactif, de l'image "busybox" avec l'option <code>--network host</code>.
-- Essayez de déduire l'adresse IP du conteneur. Qu'observez-vous ?
+</details>
+<br>  
 
-	<details>
-	<summary>Réponse.</summary>
-	Vous avez reçu une adresse dans le même réseau que votre hôte.
-	</details>
+- Essayer de trouver l'adresse IP du conteneur. Qu'observez-vous ?
 
-- Essayez de faire une requête ICMP echo request vers "www.google.com". Qu'observez-vous ?
+<details>
+  <summary markdown="span">Réponse.</summary>
 
-	<details>
-	<summary>Réponse.</summary>
-	Vous pouvez communiquer à l'extérieur.
-	</details>
-	
-- Nettoyez votre conteneur en supprimant, si nécessaire, celui créé dans cette partie.
+Il n'y a pas d'adresse. Il n'y a même pas d'interface réseau.
 
-**Note :** pour les utilisateurs de Docker Desktop sous MAC ou Windows, la commande va fonctionner, mais comme vous êtes dans une VM vous allez être connecté au réseau de l'hyperviseur. Donc, vous ne recevrez pas une adresse de votre réseau.
+</details>
+<br>  
+
+- Essayer de faire une requête ICMP echo request vers `www.google.com`. Qu'observez-vous ?
+
+<details>
+  <summary markdown="span">Réponse.</summary>
+
+Ce n'est pas possible, car nous ne sommes pas reliés à un réseau.
+
+</details>
+<br>  
+
+- Nettoyer votre conteneur en supprimant, si nécessaire, celui créé dans cette étape.
+
+### Étape 3 - Réseau host
+
+- Lancer un conteneur, en mode interactif, de l'image `busybox` avec l'option `--network host`.
+- Essayer de trouver l'adresse IP du conteneur. Qu'observez-vous ?
+
+<details>
+  <summary markdown="span">Réponse.</summary>
+
+Vous avez reçu une adresse dans le même réseau que votre hôte.
+
+</details>
+<br>  
+
+- Essayer de faire une requête ICMP echo request vers `www.google.com`. Qu'observez-vous ?
+
+<details>
+  <summary markdown="span">Réponse.</summary>
+
+Vous pouvez communiquer à l'extérieur.
+
+</details>
+<br>  
+
+- Nettoyer votre conteneur en supprimant, si nécessaire, celui créé dans cette étape.
+
+**Note :** pour les utilisateurs de Docker Desktop sous macOS ou Windows, le réseau host nécessite Docker Desktop 4.34 ou plus récent et doit être activé dans *Settings > Resources > Network > Enable host networking*. Même activé, comme vous êtes dans une VM, vous allez être connecté au réseau de l'hyperviseur. Donc, vous ne recevrez pas une adresse de votre réseau.
 
 ## Section 2 - Nginx - réseau
 
-Dans cette section, vous allez devoir utiliser l'image du serveur Web nginx afin de créer un serveur web ([Documentation Nginx](https://hub.docker.com/_/nginx)).
+Dans cette section, vous allez devoir utiliser l'image du serveur Web Nginx afin de créer un serveur Web ([Documentation Nginx](https://hub.docker.com/_/nginx)).
 
-### Section 2.1 - Nginx - premiers tests
+### Étape 1 - Nginx - premiers tests
 
-- Sur un premier terminal, lancez en arrière-plan (<code>-d</code>) l'image "nginx" sans spécifier de redirection de port avec le nom "mon_nginx" (<code>--name</code>).
-- Faite la commande <code>docker container inspect mon_nginx</code> afin de trouver l'adresse du conteneur.
-- À partir de votre navigateur favori, essayer d'ouvrir une page Web à l'adresse IP de votre conteneur nginx. Essayez avec l'adresse locale : `localhost`.
+- Sur un premier terminal, lancer en arrière-plan (`-d`) l'image `nginx` sans spécifier de redirection de port avec le nom `mon_nginx` (`--name`).
+- Faire la commande `docker container inspect mon_nginx` afin de trouver l'adresse du conteneur.
+- À partir de votre navigateur favori, essayer d'ouvrir une page Web à l'adresse IP de votre conteneur Nginx. Essayer avec l'adresse locale : `localhost`.
 
-	<details>
-	<summary>Qu'observez-vous et pourquoi ?</summary>
-	Il n'est pas possible d'accéder au serveur Web nginx. Nous n'avons pas créé de lien vers le monde extérieur de Docker. Le conteneur est seulement  accessible par les autres conteneurs de Docker qui sont dans le même réseau Docker.
-	</details>
-- Nettoyez vos conteneurs en supprimant ceux créés dans cette section.
+<details>
+  <summary markdown="span">Qu'observez-vous et pourquoi ?</summary>
 
-### Section 2.2 - Nginx - liaison
+Avec `localhost`, il n'est pas possible d'accéder au serveur Web Nginx. Il ne serait également pas possible à d'autres systèmes sur le réseau d'y accéder, car nous n'avons pas créé de lien vers le monde extérieur de Docker. Le conteneur est accessible par les autres conteneurs de Docker qui sont dans le même réseau Docker. Sous Linux, il est également accessible par votre hôte avec son adresse IP, car Docker a créé une interface virtuelle dans le même réseau que votre conteneur. Avec Docker Desktop (Windows ou macOS), ce n'est pas le cas : les conteneurs s'exécutent dans une VM et l'hôte ne peut pas joindre directement leur adresse IP.
 
-- Recréé un conteneur, mais cette fois-ci, faites une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
-- Refaites les tests de la partie précédente (utiliser http://localhost:1234 pour le navigateur local).
-- Nettoyez vos conteneurs en supprimant ceux créés dans cette partie.
+</details>
+<br>  
+
+- Nettoyer vos conteneurs en supprimant ceux créés dans cette étape.
+
+### Étape 2 - Nginx - liaison
+
+- Recréer un conteneur, mais cette fois-ci, faire une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
+- Refaire les tests de l'étape précédente (utiliser `http://localhost:1234` pour le navigateur local).
+- Nettoyer vos conteneurs en supprimant ceux créés dans cette étape.
 
 ## Section 3 - Nginx - volume
 
-- Créez-vous un répertoire de travail temporaire et créez un fichier <code>index.html</code>. Dans ce fichier, écrivez un code html simple afin d'afficher "Un fichier de mon hôte servi à partir d'un conteneur".
-- Par défaut, l'image "Nginx" utilise le répertoire <code>/usr/share/nginx/html</code> comme base de recherche de ses fichiers statiques. Vous allez devoir créer un point de montage (bind mount) afin que votre répertoire soit monté vers ce chemin au moment du démarrage du conteneur (consultez la partie "Hosting some simple static content" de la documentation [Documentation Nginx](https://hub.docker.com/_/nginx)). Vous devez également faire une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
-	- Pour spécifier le chemin (path) de l’hôte, nous pouvons écrire le chemin complet ou nous pouvons utiliser la variable shell <code>$(pwd)</code>.
-	- Remarque : pour PowerShell utiliser <code>${pwd}</code> et pour cmd.exe utiliser <code>%cd%</code>.
+### Étape 1 - Montage d'un répertoire de l'hôte (bind mount)
 
-	<details>
-	<summary>Commande.</summary>
-		
-		docker run --name some-nginx -v $(pwd):/usr/share/nginx/html -d -p 1234:80 nginx  
-	
-	</details>
-- Vérifiez que vous voyez bien votre page dans votre navigateur.
-- Supprimez votre conteneur et lancez en un nouveau en faisant maintenant un montage en lecture seule (<code>:ro</code> comme dans la documentation de nginx).
-- Vérifiez que le tout fonctionne toujours.
-- Nettoyez vos conteneurs en supprimant celui créé dans cette partie.
+- Créer un répertoire de travail temporaire et créer un fichier `index.html`. Dans ce fichier, écrire un code HTML simple afin d'afficher "Un fichier de mon hôte servi à partir d'un conteneur".
+- Par défaut, l'image `nginx` utilise le répertoire `/usr/share/nginx/html` comme base de recherche de ses fichiers statiques. Vous allez devoir créer un point de montage (bind mount) afin que votre répertoire soit monté vers ce chemin au moment du démarrage du conteneur (consulter la partie "Hosting some simple static content" de la [documentation Nginx](https://hub.docker.com/_/nginx)). Vous devez également faire une liaison entre le port 1234 de l'hôte vers le port 80 du conteneur.
+	- Pour spécifier le chemin (path) de l’hôte, nous pouvons écrire le chemin complet ou nous pouvons utiliser la variable shell `$(pwd)`.
+	- Remarque : pour PowerShell utiliser `${pwd}` et pour cmd.exe utiliser `%cd%`.
+
+<details>
+  <summary markdown="span">Commande.</summary>
+
+```bash
+docker container run --name some-nginx -v $(pwd):/usr/share/nginx/html -d -p 1234:80 nginx
+```
+
+</details>
+<br>  
+
+- Vérifier que vous voyez bien votre page dans votre navigateur.
+
+### Étape 2 - Montage en lecture seule
+
+- Supprimer votre conteneur et en lancer un nouveau en faisant maintenant un montage en lecture seule (`:ro` comme dans la documentation de Nginx).
+- Vérifier que le tout fonctionne toujours.
+- Nettoyer votre conteneur en supprimant celui créé dans cette étape.
 
 ## Section 4 - MySQL
 
-### Section 4.1 - MySQL - Base
+### Étape 1 - MySQL - Base
 
-- Si ce n'est déjà fait sur votre environnement docker, installez MySQL Workbench (https://dev.mysql.com/downloads/workbench/, choisir la bonne version pour votre Ubuntu).
+- Installer MySQL Workbench ([https://dev.mysql.com/downloads/workbench/](https://dev.mysql.com/downloads/workbench/), choisir la version pour Debian, Windows ou macOS).
 
 ```bash
 cd ~/Downloads
-sudo apt install ./mysql-workbench-community_8.0.42-1ubuntu24.04_amd64.deb
+sudo apt install ./mysql-workbench*.deb
 # Il se peut que vous ayez à faire
 sudo apt --fix-broken install
 ```
-- Lancez un conteneur à partir de l'image mysql (référence : [https://hub.docker.com/_/mysql](https://hub.docker.com/_/mysql)) :
-  - Nom : mysql
-  - Spécifiez que le conteneur doit être détaché (-d).
-  - Fournissez la valeur "Passw0rd" pour la variable d'environnement "MYSQL\_ROOT\_PASSWORD" (voir utilisation du -e dans la documentation).
-  - Liez le port 3306 local vers le port 3306 du conteneur.
+
+- Lancer un conteneur à partir de l'image `mysql` (référence : [https://hub.docker.com/_/mysql](https://hub.docker.com/_/mysql)) :
+	- Nom : `mysql`
+	- Spécifier que le conteneur doit être détaché (`-d`).
+	- Fournir la valeur `Passw0rd` pour la variable d'environnement `MYSQL_ROOT_PASSWORD` (voir utilisation du `-e` dans la documentation).
+	- Lier le port 3306 local vers le port 3306 du conteneur.
 
 <details>
-    <summary>Commande.</summary>
+  <summary markdown="span">Commande.</summary>
 
 ```bash
-docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 mysql
+docker container run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 mysql
 ```
 
 </details>
+<br>  
 
-- Avec MySQL Workbench, vérifiez que le tout marche :
-  - Connectez-vous
-  - Créez la base de données "test" (create database test;).
-  - Vérifiez que la base de données est bien existante (show databases;)
-- Arrêtez et supprimez le conteneur `mysql`.
-- Recréez un nouveau conteneur mysql et connectez-vous de nouveau à MySQL et listez les bases de données. Que constatez-vous et pourquoi ?
-
-	<details>
-	    <summary>Réponse.</summary>
-	    La base de données ne s'y trouve pas. Un nouveau conteneur utilise un nouveau volume. Il aurait fallu lier les conteneurs au même volume, créer précédemment.
-	</details>
-
-- Supprimez votre conteneur.
-
-### Section 4.2 - MySQL - Volume
-
-- Créez-vous un répertoire qui va contenir vos données pour MySQL.
-- Réutilisez votre ligne de commande pour créer un conteneur MySQL avec les mêmes caractéristiques que précédemment et ajoutez le montage d'un volume qui lie le répertoire de données que vous venez de créer au répertoire "/var/lib/mysql".
+- Avec MySQL Workbench, vérifier que le tout marche :
+	- Se connecter.
+	- Créer la base de données `test` (`create database test;`).
+	- Vérifier que la base de données est bien existante (`show databases;`).
+- Arrêter et supprimer le conteneur `mysql`.
+- Recréer un nouveau conteneur `mysql`, se connecter de nouveau à MySQL et lister les bases de données. Que constatez-vous et pourquoi ?
 
 <details>
-    <summary>Commande.</summary>
+  <summary markdown="span">Réponse.</summary>
+
+La base de données ne s'y trouve pas. Un nouveau conteneur utilise un nouveau volume. Il aurait fallu lier les conteneurs au même volume, créé précédemment.
+
+</details>
+<br>  
+
+- Supprimer votre conteneur.
+
+### Étape 2 - MySQL - Volume
+
+- Créer un répertoire qui va contenir vos données pour MySQL.
+- Réutiliser votre ligne de commande pour créer un conteneur MySQL avec les mêmes caractéristiques que précédemment et ajouter le montage d'un volume qui lie le répertoire de données que vous venez de créer au répertoire `/var/lib/mysql`.
+
+<details>
+  <summary markdown="span">Commande.</summary>
 
 ```bash
-docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 -v $(pwd)/msyql:/var/lib/mysql mysql
+docker container run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -p 3306:3306 -v $(pwd)/mysql:/var/lib/mysql mysql
 ```
 
 </details>
+<br>  
 
-- Avec MySQL Workbench, vérifiez que le tout marche :
-  - Connectez-vous.
-  - Créez la base de données "test" (create database test;).
-  - Vérifiez que la base de données est bien existante (show databases;).
-- Arrêtez et supprimez le conteneur "mysql".
-- Recréez un nouveau conteneur mysql identique et connectez-vous de nouveau à MySQL et listez les bases de données. Que constatez-vous et pourquoi ?
+- Avec MySQL Workbench, vérifier que le tout marche :
+	- Se connecter.
+	- Créer la base de données `test` (`create database test;`).
+	- Vérifier que la base de données est bien existante (`show databases;`).
+- Arrêter et supprimer le conteneur `mysql`.
+- Recréer un nouveau conteneur `mysql` identique, se connecter de nouveau à MySQL et lister les bases de données. Que constatez-vous et pourquoi ?
 
-	<details>
-	    <summary>Réponse.</summary>
-	    La base de données s'y trouve. Les deux conteneurs utilisent le même volume.
-	</details>
+<details>
+  <summary markdown="span">Réponse.</summary>
 
-- Supprimez votre conteneur.
+La base de données s'y trouve. Les deux conteneurs utilisent le même volume.
 
+</details>
+<br>  
 
-## Section 5 - Wordpress - On fait parler plusieurs conteneurs ?
+- Supprimer votre conteneur.
 
-### Section 5.1 - Wordpress - Version manuelle
+## Section 5 - WordPress - On fait parler plusieurs conteneurs ?
 
-- Créez-vous un nouveau répertoire pour stocker une autre installation de bases de données.
-- Créez un nouveau conteneur avec les options précédentes en modifiant le chemin du montage ainsi qu'en ajoutant les variables d'environnement suivantes :
-  - MYSQL\_DATABASE=wordpress
-  - MYSQL\_USER=wordpress
-  - MYSQL\_ROOT\_PASSWORD=Passw0rd
-  - MYSQL\_PASSWORD=Passw0rd
-- Avec MySQL Workbench, essayez de vous connecter à la base de données wordpress avec le nom d'utilisateur "wordpress" et le mot de passe "Passw0rd".
-- Cherchez l'adresse IP du conteneur mysql.
-- Créez un conteneur à partir de l'image wordpress ([https://hub.docker.com/_/wordpress](https://hub.docker.com/_/wordpress)) en liant le port local 8080 au port 80 et avec les variables d'environnement suivantes :
-  - WORDPRESS\_DB_HOST=172.17.0.2
-  - WORDPRESS\_DB\_USER=wordpress
-  - WORDPRESS\_DB\_PASSWORD=Passw0rd
-  - WORDPRESS\_DB\_NAME=wordpress
-  - WORDPRESS\_TABLE\_PREFIX=wp_
-- Testez votre site web (localhost au port 8080) et vérifiez que ça fonctionne.
+### Étape 1 - WordPress - Version manuelle
+
+- Créer un nouveau répertoire pour stocker une autre installation de bases de données.
+- Créer un nouveau conteneur avec les options précédentes en modifiant le chemin du montage ainsi qu'en ajoutant les variables d'environnement suivantes :
+	- `MYSQL_DATABASE=wordpress`
+	- `MYSQL_USER=wordpress`
+	- `MYSQL_ROOT_PASSWORD=Passw0rd`
+	- `MYSQL_PASSWORD=Passw0rd`
+- Avec MySQL Workbench, essayer de se connecter à la base de données `wordpress` avec le nom d'utilisateur `wordpress` et le mot de passe `Passw0rd`.
+- Chercher l'adresse IP du conteneur `mysql`.
+- Créer un conteneur à partir de l'image `wordpress` ([https://hub.docker.com/_/wordpress](https://hub.docker.com/_/wordpress)) en liant le port local 8080 au port 80 et avec les variables d'environnement suivantes (remplacer l'adresse IP par celle que vous avez trouvée) :
+	- `WORDPRESS_DB_HOST=172.17.0.2`
+	- `WORDPRESS_DB_USER=wordpress`
+	- `WORDPRESS_DB_PASSWORD=Passw0rd`
+	- `WORDPRESS_DB_NAME=wordpress`
+	- `WORDPRESS_TABLE_PREFIX=wp_`
+- Tester votre site Web (`localhost` au port 8080) et vérifier que ça fonctionne.
 - Que pensez-vous de toutes ces manipulations ?
 
 <details>
-    <summary>Solution.</summary>
+  <summary markdown="span">Solution.</summary>
 
 ```bash
-docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=Passw0rd -p 3306:3306 -v $(pwd)/msyql_wp:/var/lib/mysql mysql
+docker container run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=Passw0rd -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=Passw0rd -p 3306:3306 -v $(pwd)/mysql_wp:/var/lib/mysql mysql
 
-docker run --rm --name wordpress -d -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=Passw0rd -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_TABLE_PREFIX=wp_ -p 8080:80 wordpress
+docker container run --rm --name wordpress -d -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=Passw0rd -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_TABLE_PREFIX=wp_ -p 8080:80 wordpress
 ```
 
 </details>
+<br>  
 
-### Section 5.2 - Wordpress - Un début d'orchestration ?
+### Étape 2 - WordPress - Un début d'orchestration ?
 
-- Lisez et exécutez les instructions présentes à la page suivante : [https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/)
-	- Pour l'arrêter utiliser la commande <code>docker compose down</code>.
+- Consulter les informations présentées à la page suivante : [https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/)
+	- Nous allons voir Docker Compose dans le prochain exercice. Mais si ça vous le dit, vous pouvez essayer de réaliser ce petit projet. Cependant, certaines des instructions données sont désuètes.
+	- Comme indiqué dans le bas de la page, pour l'arrêter, utiliser la commande `docker compose down`.
 - Quels sont les avantages d'un tel système ?
 
+## Références
+- [https://docs.docker.com/engine/network/drivers/host/](https://docs.docker.com/engine/network/drivers/host/)
+- [https://hub.docker.com/_/nginx](https://hub.docker.com/_/nginx)
+- [https://hub.docker.com/_/mysql](https://hub.docker.com/_/mysql)
+- [https://hub.docker.com/_/wordpress](https://hub.docker.com/_/wordpress)
+- [https://dev.mysql.com/downloads/workbench/](https://dev.mysql.com/downloads/workbench/)
+- [https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/)
 
+---
+
+*Version 2026-11-23*
