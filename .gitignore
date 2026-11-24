@@ -1,3 +1,5 @@
 .DS_Store
 ~*.*
 
+# Pour l'agent IA de claude
+CLAUDE.md
