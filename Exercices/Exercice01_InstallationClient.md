@@ -94,7 +94,7 @@ Pour ce faire entrer la commande suivante à la racine de votre dossier usager.
 pwd
 #Sortie attendu votre répertoire usager:
 /home/prof
-# Générer la clé SSH en changeant le courriel pour le votre :
+# Générer une clé SSH
 ssh-keygen -t ed25519 -N '' -C "Ubuntu client pour 420-W45-SF."
 # Une fois que vous aurez entré cette commande, une question va apparaître :
 Enter file in which to save the key (/home/xxxxx/.ssh/ed25519):
